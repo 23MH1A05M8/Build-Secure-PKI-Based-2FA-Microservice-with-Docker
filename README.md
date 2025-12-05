@@ -1,4 +1,4 @@
-#!/bin/bash
+
 repo_url=https://github.com/23MH1A05M8/Build-Secure-PKI-Based-2FA-Microservice-with-Docker
 
 
