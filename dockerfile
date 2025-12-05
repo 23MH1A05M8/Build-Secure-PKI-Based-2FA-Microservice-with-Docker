@@ -20,9 +20,13 @@ ENV TZ=UTC
 
 # Install cron and tzdata
 RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
     cron \
     tzdata \
+    procps \
  && rm -rf /var/lib/apt/lists/*
+
 
 # Copy installed packages
 COPY --from=builder /usr/local/lib/python3.11 /usr/local/lib/python3.11
