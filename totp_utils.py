@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import pyotp
 import base64
 
@@ -44,7 +44,7 @@ def verify_totp_code(hex_seed: str, code: str, valid_window: int = 1) -> bool:
     totp = pyotp.TOTP(seed_base32, digits=6, interval=30)
 
     # Verify with tolerance window
-=======
+
 import pyotp
 import base64
 
@@ -88,7 +88,3 @@ def verify_totp_code(hex_seed: str, code: str, valid_window: int = 1) -> bool:
 
     # Create TOTP generator
     totp = pyotp.TOTP(seed_base32, digits=6, interval=30)
-
-    # Verify with tolerance window
->>>>>>> e4fc7b68ceb7c6b7837155c0faa958e45b7c3b23
-    return totp.verify(code, valid_window=valid_window)

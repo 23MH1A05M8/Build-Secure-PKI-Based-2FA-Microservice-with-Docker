@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 #!/usr/bin/env python3
 
 import subprocess
@@ -69,7 +69,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-=======
 #!/usr/bin/env python3
 
 import subprocess
@@ -140,4 +139,4 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> e4fc7b68ceb7c6b7837155c0faa958e45b7c3b23
+
