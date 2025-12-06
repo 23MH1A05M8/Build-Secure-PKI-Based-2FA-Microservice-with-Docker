@@ -39,4 +39,8 @@ RUN crontab /etc/cron.d/2fa-cron
 
 EXPOSE 8080
 
+<<<<<<< HEAD
 CMD service cron start && uvicorn main:app --host 0.0.0.0 --port 8080
+=======
+CMD service cron start && uvicorn main:app --host 0.0.0.0 --port 8080
+>>>>>>> e4fc7b68ceb7c6b7837155c0faa958e45b7c3b23
