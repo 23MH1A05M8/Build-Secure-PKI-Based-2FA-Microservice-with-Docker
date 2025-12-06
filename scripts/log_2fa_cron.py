@@ -1,45 +1,44 @@
 #!/usr/bin/env python3
-import time
-import hmac
-import hashlib
-import struct
-import base64
-from datetime import datetime
+import os
+import sys
+import datetime
 
-# 1. Read hex seed from /data/seed.txt
-seed_file = '/data/seed.txt'
-try:
-    with open(seed_file, 'r') as f:
-        hex_seed = f.read().strip()
-except FileNotFoundError:
-    print(f"{datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')} - Seed file not found")
-    exit(1)
+# Allow Python to import totp_utils.py from /app
+sys.path.append("/app")
 
-# Convert hex → bytes
-seed_bytes = bytes.fromhex(hex_seed)
+from totp_utils import generate_totp_code
 
-# 2. TOTP setup
-time_step = 30
-t = int(time.time() // time_step)
+SEED_FILE = "/data/seed.txt"
 
-# Convert counter to 8-byte big-endian
-counter = struct.pack(">Q", t)
+def read_seed():
+    """Read the decrypted hex seed from persistent storage."""
+    if not os.path.exists(SEED_FILE):
+        return None
+    try:
+        with open(SEED_FILE, "r") as f:
+            return f.read().strip()
+    except:
+        return None
 
-# 3. HMAC-SHA1
-hmac_hash = hmac.new(seed_bytes, counter, hashlib.sha1).digest()
+def main():
+    hex_seed = read_seed()
+    if not hex_seed:
+        print("Seed not found")
+        return
 
-# 4. Dynamic Truncation (RFC 4226)
-offset = hmac_hash[-1] & 0x0F
-code = (
-    ((hmac_hash[offset] & 0x7F) << 24) |
-    ((hmac_hash[offset+1] & 0xFF) << 16) |
-    ((hmac_hash[offset+2] & 0xFF) << 8) |
-    (hmac_hash[offset+3] & 0xFF)
-)
+    # Generate TOTP code from seed
+    try:
+        code = generate_totp_code(hex_seed)
+    except Exception as e:
+        print(f"Error generating TOTP: {e}")
+        return
 
-# 6-digit TOTP
-totp_code = code % 1000000
+    # Get current UTC timestamp
+    timestamp = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
 
-# Print result
-timestamp = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-print(f"{timestamp} - 2FA Code: {totp_code:06d}")
+    # Output format (cron appends this into /cron/last_code.txt)
+    print(f"{timestamp} - 2FA Code: {code}", flush=True)
+
+
+if __name__ == "__main__":
+    main()
