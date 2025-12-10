@@ -1,9 +1,14 @@
-# Do not commit your private key
-keys/student_private.pem
+# Encrypted seed (sensitive)
+encrypted_seed.txt
 
 # Python cache
 __pycache__/
 *.pyc
 
-# VS Code settings
+# Environment files
+.env
+
+# IDE files
 .vscode/
+.idea/
+
